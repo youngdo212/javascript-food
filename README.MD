@@ -169,3 +169,51 @@ DOMContentLoaded 이벤트가 발생하면 ajax를 통해 데이터를 불러와
 3. 이동거리 동적 설정
    * 슬라이드 UI에서 추후에 변경될 사항을 ui의 크기(wrapper의 크기 & 한 화면에 노출되는 아이템의 개수)라고 설정
    * ui변경에 맞춰서 애니메이션의 이동 거리를 동적으로 생성하도록 구현: `element.offsetWidth`
+
+### 5. 상하단 이동버튼
+
+```javascript
+const scrollButton = new ScrollButton({
+  scrollButtonWrap: // scroll button wrap
+})
+```
+
+최상단과 최하단을 이동하는 버튼을 구현한다.
+
+##### 기능
+
+페이지의 스크롤과 관련없이 항상 고정위치에 존재한다. 또한 최상단에 위치할 경우 fade out 효과로 사라지며 최상단이 아닐경우 fade in 으로 등장한다. 최상단(최하단)으로 이동할 시에는 ease in 효과를 적용하여 가속도가 붙도록 한다
+
+##### 고려사항
+
+1. 뷰포트가 줄어들면 고정된 위치도 변경된다
+
+   * css의 단위 `vw`,` vh`는 1/100 * 뷰포트를 의미한다. 이를 이용하여 화면 사이즈에 동적으로 위치가 변하는 버튼을 구현
+
+2. 최상단에 위치하면 fade out 효과가 발생하여 완전히 사라지면 **엘리먼트도 비활성화가 된다**
+
+   * CSS의 animation속성과 Keyframes를 사용하여 fadeout과 visibility효과를 동시에 적용시킨다
+
+   ```css
+   @keyframes fade_out {
+     0% {opacity: 1; visibility: visible;}
+     100% {opacity: 0; visibility: hidden;}
+   }
+   .button.deactive {
+     animation: fade_out .5s forwards;
+   }
+   /* transition-delay를 이용
+   .button.deactive {
+     transition: opacity .5s, visibility .1s .5s;
+   }*/
+   ```
+
+3. 화살표 이미지는 pseudo element를 사용하여 만든다: `::before`, `::after`
+
+4. 스크롤을 이용하기 위한 편리한 속성들
+
+   * `window.scrollTo(x,y) ` : 해당 좌표로 이동
+   * `window.scrollBy(x,y)` : 해당 크기만큼 이동
+   * `window.pageYOffset`: 현재 스크롤된 페이지의 y 좌표
+   * `window.innerHeight`: 뷰포트의 height
+
