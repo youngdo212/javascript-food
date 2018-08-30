@@ -24,13 +24,16 @@ export class ScrollButton {
   }
 
   _scroll(direction) {
-    if(direction === 'up') this._scrollEaseIn(-1);
-    else if(direction === 'down') this._scrollEaseIn(1);
+    const endY = document.body.offsetHeight - innerHeight;
+
+    if(direction === 'up') this._scrollEaseIn({targetRange: {from: 0, to: endY}, volume: -1});
+    else if(direction === 'down') this._scrollEaseIn({targetRange: {from: 0, to: endY}, volume: 1});
   }
 
-  _scrollEaseIn(volume) {
+  _scrollEaseIn({targetRange: {from, to}, volume}) {
     scrollBy(0, volume);
-    const endY = document.body.offsetHeight - innerHeight;
-    if(pageYOffset > 0 && pageYOffset < endY) requestAnimationFrame(this._scrollEaseIn.bind(this, volume * 1.5));
+    if(pageYOffset > from && pageYOffset < to) requestAnimationFrame(() => {
+      this._scrollEaseIn({targetRange: {from: from, to: to}, volume: volume * 1.5});
+    });
   }
 }
