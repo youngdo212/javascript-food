@@ -727,10 +727,43 @@
   height: 40px;
   border: 1px solid #ccc;
   background: #fff;
+  text-align: center;
 }
 
 .up_scroll_button {
   margin-bottom: 10px;
+  padding: 6px 0px;
+}
+
+.down_scroll_button {
+  padding: 16px 0px;
+}
+
+.up_scroll_button::before, .up_scroll_button::after, .down_scroll_button::before, .down_scroll_button::after {
+  content: '';
+  display: inline-block;
+  box-sizing: border-box;
+  width: 15px;
+  height: 15px;
+  border-right: 2px solid #777;
+}
+
+.up_scroll_button::before {
+  transform: rotate(45deg);
+  margin-right: 4px;
+}
+
+.up_scroll_button::after {
+  transform: rotate(135deg);
+}
+
+.down_scroll_button::before {
+  transform: rotate(-45deg);
+  margin-right: 4px;
+}
+
+.down_scroll_button::after {
+  transform: rotate(-135deg);
 }
 
 .up_scroll_button:hover, .down_scroll_button:hover {
